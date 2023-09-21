@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const Comment = require("../models/comments");
 
 function handleAddNewBlogPage(req,res){
     return res.render('addBlog',{
@@ -22,10 +23,23 @@ async function handleAddNewBlog(req,res){
 
 async function handleBlogPage(req,res){
     const blog = await Blog.findById(req.params.id).populate("createdBy")
+    const comments = await Comment.find({blogId:req.params.id}).populate("createdBy")
     res.render('blog',{
         user:req.user,
-        blog:blog
+        blog:blog,
+        comments:comments
     })
 }
 
-module.exports = {handleAddNewBlog, handleAddNewBlogPage, handleBlogPage}
+
+async function handleAddComment(req,res){
+    await Comment.create({
+        content:req.body.content,
+        blogId:req.params.blogId,
+        createdBy:req.user._id
+    })
+    console.log("asdfgh");
+    res.redirect(`/blog/${req.params.blogId}`)
+}
+
+module.exports = {handleAddNewBlog, handleAddNewBlogPage, handleBlogPage, handleAddComment}

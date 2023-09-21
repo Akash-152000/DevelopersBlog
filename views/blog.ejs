@@ -17,6 +17,24 @@
         <div class="container">
             <img src=<%=blog.createdBy.profileImage%> width="50px"><%=blog.createdBy.fullName%>
         </div>
+
+        <div class="container mt-5">
+            <h1>Comments(<%=comments.length%>)</h1>
+            <% if (locals.user) { %>
+                <form action="/blog/comment/<%=blog._id%>" method="post">
+                    <input type="text" class="form-control mb-2" id="content" name="content" placeholder="Add your comment.." aria-describedby="content">
+                    <button class="btn btn-primary" type="submit">Add Comment</button>
+                </form>
+            <% } %>
+            
+        </div>
+        <div class="container mt-3">
+            <% comments.forEach(comment => { %>
+                <img src=<%=comment.createdBy.profileImage%> width="50px"><%=comment.createdBy.fullName%>
+                <pre><%=comment.content%></pre>
+            <% }) %>
+        </div>
+
         <%- include('./partials/scripts') %>
 </body>
 
