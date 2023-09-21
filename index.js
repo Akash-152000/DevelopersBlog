@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const userRoute = require('./routes/userRoute')
 const blogRoute = require('./routes/blogRoute')
 const checkForAuthenticationCookie = require('./middlewares/authentication.js')
+const Blog = require('./models/blog.js')
 
 // initialize
 const app = express();
@@ -13,6 +14,7 @@ const PORT = 8000
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
 app.use(checkForAuthenticationCookie("token"))
+app.use(express.static(path.resolve('./public')))
 
 // Connection to mongo db
 connectToMongo();
@@ -20,10 +22,11 @@ connectToMongo();
 app.set('view engine', 'ejs');
 app.set('views',path.resolve('./views'));
 
-app.get('/',(req,res)=>{
-
+app.get('/',async (req,res)=>{
+    const allBlogs = await Blog.find({})
     res.render('home',{
-        user:req.user
+        user:req.user,
+        blogs:allBlogs
     })
 
 })
