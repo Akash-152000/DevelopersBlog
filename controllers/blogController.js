@@ -20,4 +20,12 @@ async function handleAddNewBlog(req,res){
     return res.redirect(`/blog/${blog._id}`)
 }
 
-module.exports = {handleAddNewBlog,handleAddNewBlogPage}
+async function handleBlogPage(req,res){
+    const blog = await Blog.findById(req.params.id).populate("createdBy")
+    res.render('blog',{
+        user:req.user,
+        blog:blog
+    })
+}
+
+module.exports = {handleAddNewBlog, handleAddNewBlogPage, handleBlogPage}
