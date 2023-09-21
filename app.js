@@ -1,15 +1,16 @@
+require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const connectToMongo = require('./connection.js')
 const cookieParser = require('cookie-parser')
-const userRoute = require('./routes/userRoute')
-const blogRoute = require('./routes/blogRoute')
+const userRoute = require('./routes/userRoute.js')
+const blogRoute = require('./routes/blogRoute.js')
 const checkForAuthenticationCookie = require('./middlewares/authentication.js')
 const Blog = require('./models/blog.js')
 
 // initialize
 const app = express();
-const PORT = 8000
+const PORT = process.env.PORT
 
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
